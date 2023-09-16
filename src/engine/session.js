@@ -9,7 +9,7 @@ export {Session};
 
 // Output: random integer in range [min, max]
 function generateRandomInt(min, max) {
-  return Math.round(min + Math.random() * (max - min));
+  return Math.floor(min + Math.random() * (max + 1 - min));
 }
 
 function generateTetromino() {
