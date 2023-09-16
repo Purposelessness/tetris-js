@@ -1,19 +1,14 @@
-import * as co from './constants/config.js';
-import {Board} from './board.js';
+import {Engine} from './engine/engine.js';
 
-const canvas = document.getElementById('board');
-const ctx = canvas.getContext('2d');
+const board = document.getElementById('board');
+const ctx = board.getContext('2d');
 
-ctx.canvas.width = co.COLUMNS * co.BLOCK_SIZE;
-ctx.canvas.height = co.ROWS * co.BLOCK_SIZE;
+const engine = new Engine(ctx);
 
-ctx.scale(co.BLOCK_SIZE, co.BLOCK_SIZE);
+document.addEventListener('keydown', function(event) {
+  engine.onKeydown(event);
+});
 
-const board = new Board();
-
-export function play() {
-  board.reset();
-  console.table(board.grid);
-}
-
-document.getElementById('play-button').onclick = play
+document.getElementById('play-button').onclick = function() {
+  engine.run();
+};

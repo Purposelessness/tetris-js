@@ -1,9 +1,13 @@
-const COLUMNS = 10;
-const ROWS = 20;
+export {
+  WIDTH, HEIGHT, BLOCK_SIZE, COLORS,
+};
+
+const WIDTH = 10;
+const HEIGHT = 20;
 const BLOCK_SIZE = 30;
 
 const COLORS = [
-  'none',
+  'gray',
   'red',
   'orange',
   'yellow',
@@ -11,8 +15,3 @@ const COLORS = [
   'blue',
   'purple',
 ];
-Object.freeze(COLORS);
-
-export {
-  COLUMNS, ROWS, BLOCK_SIZE, COLORS,
-};
