@@ -23,12 +23,16 @@ class GameSession {
   constructor() {
     this.board = new Board(WIDTH, HEIGHT);
     this.controller = new GameSessionController(this.board);
-    this.tetromino = generateTetromino();
-    this.controller.setTetromino(this.tetromino);
 
     this.sessionEndedEventHandler = new EventHandler('sessionEnded');
     this.redrawEventHandler = new EventHandler('redraw');
     this.linesCleanedEventHandler = new EventHandler('linesCleaned');
+  }
+
+  start() {
+    this.tetromino = generateTetromino();
+    this.controller.setTetromino(this.tetromino);
+    this.callRedraw();
   }
 
   callRedraw() {

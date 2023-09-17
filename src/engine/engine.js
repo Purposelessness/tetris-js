@@ -40,6 +40,8 @@ class Engine {
   }
 
   run() {
+    clearTimeout(this.timeoutId);
+
     this.session = new GameSession();
     this.session.sessionEndedEventHandler.addListeners(
         this.onSessionEndedEvent);
@@ -47,6 +49,8 @@ class Engine {
         this.viewManager.onRedrawEvent);
     this.session.linesCleanedEventHandler.addListeners(
         this.viewManager.onLinesCleanedEvent);
+
+    this.session.start();
     this.callNextTick();
   }
 
@@ -57,7 +61,7 @@ class Engine {
   }
 
   callNextTick() {
-    setTimeout(() => {
+    this.timeoutId = setTimeout(() => {
       this.tick();
     }, 500);
   }
