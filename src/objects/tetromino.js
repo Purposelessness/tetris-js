@@ -9,6 +9,8 @@ class Tetromino {
     this.shapes = shapes;
     this.shape_index = 0;
     this.color = color;
+    this.height = this.shape().length;
+    this.width = this.shape()[0].length;
 
     for (let i = 0; i < this.shapes.length; ++i) {
       colorMatrix(this.shapes[i], this.color);

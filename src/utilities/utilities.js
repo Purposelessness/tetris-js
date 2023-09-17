@@ -13,7 +13,6 @@ function checkBoardLine(boardLine) {
 function cleanBoardLines(board, tetromino) {
   const shape = tetromino.shape();
   const grid = board.grid;
-  const gridWidth = grid[0].length;
   const y = tetromino.y;
   let linesToPop = [];
   for (let j = shape.length - 1; j >= 0; --j) {
@@ -30,7 +29,7 @@ function cleanBoardLines(board, tetromino) {
   for (let i = 0; i < linesToPop.length; ++i) {
     grid.splice(linesToPop[i], 1);
   }
-  grid.unshift(...getEmptyMatrix(linesToPop.length, gridWidth));
+  grid.unshift(...getEmptyMatrix(linesToPop.length, board.width));
   return linesToPop.length;
 }
 

@@ -39,7 +39,6 @@ class ViewManager {
     this.nextTetrominoCtx.width = 4 * BLOCK_SIZE;
     this.nextTetrominoCtx.height = 4 * BLOCK_SIZE;
     this.nextTetrominoCtx.scale(BLOCK_SIZE, BLOCK_SIZE);
-    console.log(this.nextTetrominoCtx);
   }
 
   redraw(view) {
