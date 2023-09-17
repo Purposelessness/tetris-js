@@ -1,4 +1,10 @@
-import {BLOCK_SIZE, COLORS, HEIGHT, WIDTH} from '../constants/config.js';
+import {
+  BLOCK_SIZE,
+  COLORS,
+  GRID_WIDTH,
+  HEIGHT,
+  WIDTH,
+} from '../constants/config.js';
 
 export {ViewManager};
 
@@ -41,7 +47,10 @@ class ViewManager {
       for (let i = 0; i < view[j].length; ++i) {
         const colorIndex = view[j][i];
         this.ctx.fillStyle = COLORS[colorIndex];
-        this.ctx.fillRect(i + 0.025, j + 0.025, 0.95, 0.95);
+        this.ctx.fillRect(
+            i + GRID_WIDTH, j + GRID_WIDTH,
+            1 - 2 * GRID_WIDTH, 1 - 2 * GRID_WIDTH,
+        );
       }
     }
   }
