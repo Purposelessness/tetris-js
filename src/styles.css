@@ -1,20 +1,33 @@
+body {
+  background-color: lightgrey;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .grid {
   display: grid;
-  grid-template-columns: 320px 200px;
+  grid-template-columns: fit-content(300px) 1fr;
+}
+
+#game-board {
+  margin: 20px;
 }
 
 .information-column {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  margin: 40px;
 }
 
-.game-board {
+.board {
   border: solid 2px;
 }
 
 button {
-  background-color: #4caf50;
+  background-color: limegreen;
   font-size: 16px;
   padding: 15px 30px;
   cursor: pointer;

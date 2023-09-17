@@ -6,11 +6,13 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
+<div class="container">
   <div class="grid">
-    <canvas id="board" class="game-board"></canvas>
+    <canvas id="game-board" class="board"></canvas>
     <div class="information-column">
-      <div>
         <h1>Tetris</h1>
+      <canvas id="next-tetromino" class="board"></canvas>
+      <div>
         <p>Name: <span id="name">user</span></p>
         <p>Score: <span id="score">0</span></p>
         <p>Lines: <span id="lines">0</span></p>
@@ -20,7 +22,7 @@
       <button id="play-button">Play</button>
     </div>
   </div>
-
-  <script type="module" src="./main.js"></script>
+</div>
 </body>
+<script type="module" src="./main.js"></script>
 </html>

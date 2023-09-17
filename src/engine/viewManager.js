@@ -12,9 +12,10 @@ class ViewManager {
         event.get('count');
   };
 
-  constructor(document, nameLabel, scoreLabel, linesLabel, levelLabel) {
-    const board = document.getElementById('board');
-    this.ctx = board.getContext('2d');
+  constructor(document) {
+    this.ctx = document.getElementById('game-board').getContext('2d');
+    this.nextTetrominoCtx = document.getElementById('next-tetromino').
+        getContext('2d');
 
     this.nameLabel = document.getElementById('name');
     this.scoreLabel = document.getElementById('score');
@@ -28,6 +29,11 @@ class ViewManager {
     this.ctx.canvas.width = WIDTH * BLOCK_SIZE;
     this.ctx.canvas.height = HEIGHT * BLOCK_SIZE;
     this.ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+
+    this.nextTetrominoCtx.width = 4 * BLOCK_SIZE;
+    this.nextTetrominoCtx.height = 4 * BLOCK_SIZE;
+    this.nextTetrominoCtx.scale(BLOCK_SIZE, BLOCK_SIZE);
+    console.log(this.nextTetrominoCtx);
   }
 
   redraw(view) {
@@ -35,7 +41,7 @@ class ViewManager {
       for (let i = 0; i < view[j].length; ++i) {
         const colorIndex = view[j][i];
         this.ctx.fillStyle = COLORS[colorIndex];
-        this.ctx.fillRect(i, j, 1, 1);
+        this.ctx.fillRect(i + 0.025, j + 0.025, 0.95, 0.95);
       }
     }
   }
