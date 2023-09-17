@@ -3,10 +3,11 @@ import {colorMatrix} from '../utilities/utilities.js';
 export {Tetromino};
 
 class Tetromino {
-  constructor(shapes, color) {
+  constructor(struct, color) {
     this.x = 0;
     this.y = 0;
-    this.shapes = shapes;
+    this.shapes = struct.shapes;
+    this.rawShape = struct.rawShape;
     this.shape_index = 0;
     this.color = color;
     this.height = this.shape().length;

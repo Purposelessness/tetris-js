@@ -23,20 +23,37 @@ class GameSession {
   constructor() {
     this.board = new Board(WIDTH, HEIGHT);
     this.controller = new GameSessionController(this.board);
+    this.tetromino = null;
 
     this.sessionEndedEventHandler = new EventHandler('sessionEnded');
     this.redrawEventHandler = new EventHandler('redraw');
+    this.nextTetrominoGeneratedEventHandler = new EventHandler(
+        'nextTetrominoGenerated');
     this.linesCleanedEventHandler = new EventHandler('linesCleaned');
   }
 
-  start() {
-    this.tetromino = generateTetromino();
-    this.controller.setTetromino(this.tetromino);
+  setTetromino(force = false) {
+    if (this.tetromino === null) {
+      this.tetromino = generateTetromino();
+      this.nextTetromino = generateTetromino();
+    } else {
+      this.tetromino = this.nextTetromino;
+      this.nextTetromino = generateTetromino();
+    }
+
+    const isAlive = this.controller.setTetromino(this.tetromino, force);
     this.callRedraw();
+    this.callNextTetrominoGenerated();
+    return isAlive;
   }
 
   callRedraw() {
     this.redrawEventHandler.call({'view': this.view()});
+  }
+
+  callNextTetrominoGenerated() {
+    this.nextTetrominoGeneratedEventHandler.call(
+        {'tetromino': this.nextTetromino.rawShape});
   }
 
   onMovementEvent(direction, isTriggeredByTick = false) {
@@ -53,11 +70,7 @@ class GameSession {
       this.linesCleanedEventHandler.call({'count': linesCount});
     }
 
-    this.tetromino = generateTetromino();
-    const isAlive = this.controller.setTetromino(this.tetromino, true);
-
-    this.callRedraw();
-
+    const isAlive = this.setTetromino(true);
     if (!isAlive) {
       this.sessionEndedEventHandler.call();
     }

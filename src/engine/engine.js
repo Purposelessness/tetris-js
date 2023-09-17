@@ -47,10 +47,12 @@ class Engine {
         this.onSessionEndedEvent);
     this.session.redrawEventHandler.addListeners(
         this.viewManager.onRedrawEvent);
+    this.session.nextTetrominoGeneratedEventHandler.addListeners(
+        this.viewManager.onNextTetrominoGenerated);
     this.session.linesCleanedEventHandler.addListeners(
         this.viewManager.onLinesCleanedEvent);
 
-    this.session.start();
+    this.session.setTetromino();
     this.callNextTick();
   }
 

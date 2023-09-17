@@ -9,8 +9,7 @@ class GameSessionController {
   setTetromino(tetromino, force = false) {
     this.tetromino = tetromino;
     const startY = 2 - this.tetromino.shape().length;
-    const startX = Math.floor(this.board.width / 2) -
-        Math.floor(this.tetromino.width / 2);
+    const startX = Math.floor((this.board.width - this.tetromino.width) / 2);
     return this.moveTo(startX, startY, force);
   }
 
