@@ -1,15 +1,10 @@
-import {fillMatrixWith} from '../utilities/utilities.js';
+import {fillMatrixWith, getEmptyMatrix} from '../utilities/utilities.js';
 
 export {Board};
 
-function getEmptyBoard(rows, columns) {
-  return Array.from({length: rows}, () =>
-      Array(columns).fill(0));
-}
-
 class Board {
   constructor(width, height) {
-    this.grid = getEmptyBoard(height, width);
+    this.grid = getEmptyMatrix(height, width);
   }
 
   fillWith(matrix, x, y) {

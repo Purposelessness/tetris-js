@@ -1,6 +1,6 @@
-export {SessionController};
+export {GameSessionController};
 
-class SessionController {
+class GameSessionController {
   constructor(board) {
     this.board = board;
     this.tetromino = null;

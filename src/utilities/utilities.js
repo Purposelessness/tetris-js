@@ -1,4 +1,9 @@
-export {colorMatrix, fillMatrixWith, safeCall, cleanBoardLines};
+export {getEmptyMatrix, colorMatrix, fillMatrixWith, safeCall, cleanBoardLines};
+
+function getEmptyMatrix(height, width) {
+  return Array.from({length: height}, () =>
+      Array(width).fill(0));
+}
 
 function checkBoardLine(boardLine) {
   return boardLine.every((cell) => { return cell !== 0; });
@@ -7,22 +12,25 @@ function checkBoardLine(boardLine) {
 function cleanBoardLines(board, tetromino) {
   const shape = tetromino.shape();
   const grid = board.grid;
+  const gridWidth = grid[0].length;
   const y = tetromino.y;
-  let linesToPop = 0;
+  let linesToPop = [];
   for (let j = shape.length - 1; j >= 0; --j) {
     for (let i = 0; i < shape[j].length; ++i) {
       if (shape[j][i] === 0) continue;
       if (checkBoardLine(grid[y + j])) {
-        ++linesToPop;
+        linesToPop.push(y + j);
         break;
       }
     }
   }
-  for (let i = 0; i < linesToPop; ++i) {
-    grid.pop();
-    grid.unshift(Array(grid[0].length).fill(0));
+  if (linesToPop.length <= 0) return 0;
+
+  for (let i = 0; i < linesToPop.length; ++i) {
+    grid.splice(linesToPop[i], 1);
   }
-  return linesToPop;
+  grid.unshift(...getEmptyMatrix(linesToPop.length, gridWidth));
+  return linesToPop.length;
 }
 
 function colorMatrix(matrix, value) {

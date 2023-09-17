@@ -1,12 +1,12 @@
 import {Board} from '../objects/board.js';
 import {COLORS, HEIGHT, WIDTH} from '../constants/config.js';
-import {SessionController} from './sessionController.js';
+import {GameSessionController} from './gameSessionController.js';
 import {Tetromino} from '../objects/tetromino.js';
 import {TETROMINOS} from '../constants/tetromino.js';
 import {cleanBoardLines, fillMatrixWith} from '../utilities/utilities.js';
 import {EventHandler} from '../utilities/eventHandler.js';
 
-export {Session};
+export {GameSession};
 
 // Output: random integer in range [min, max]
 function generateRandomInt(min, max) {
@@ -14,15 +14,16 @@ function generateRandomInt(min, max) {
 }
 
 function generateTetromino() {
-  const tetrominoIndex = generateRandomInt(0, TETROMINOS.length - 1);
+  // const tetrominoIndex = generateRandomInt(0, TETROMINOS.length - 1);
+  const tetrominoIndex = 0;
   const colorIndex = generateRandomInt(1, COLORS.length - 1);
   return new Tetromino(TETROMINOS[tetrominoIndex], colorIndex);
 }
 
-class Session {
+class GameSession {
   constructor() {
     this.board = new Board(WIDTH, HEIGHT);
-    this.controller = new SessionController(this.board);
+    this.controller = new GameSessionController(this.board);
     this.tetromino = generateTetromino();
     this.controller.setTetromino(this.tetromino);
 

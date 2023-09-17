@@ -2,7 +2,7 @@ import {
   MOVEMENT_DIRECTION,
   ROTATION_DIRECTION,
 } from '../constants/sessionConfig.js';
-import {Session} from './session.js';
+import {GameSession} from './gameSession.js';
 import {safeCall as safeCallImpl} from '../utilities/utilities.js';
 import {ViewManager} from './viewManager.js';
 
@@ -40,7 +40,7 @@ class Engine {
   }
 
   run() {
-    this.session = new Session();
+    this.session = new GameSession();
     this.session.sessionEndedEventHandler.addListeners(
         this.onSessionEndedEvent);
     this.session.redrawEventHandler.addListeners(
@@ -63,12 +63,12 @@ class Engine {
   }
 
   onMovementEvent(direction, isForced = false) {
-    Engine.safeCall(this.session, Session.prototype.onMovementEvent,
+    Engine.safeCall(this.session, GameSession.prototype.onMovementEvent,
         direction, isForced);
   }
 
   onRotationEvent(direction) {
-    Engine.safeCall(this.session, Session.prototype.onRotationEvent, direction);
+    Engine.safeCall(this.session, GameSession.prototype.onRotationEvent, direction);
   }
 
   onKeydown(event) {
