@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tetris</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+<section class="container">
+  <div class="grid">
+
+    <div class="information-column">
+      <h1>Leaderboard</h1>
+      <table id="leaderboard">
+        <tr>
+          <th>Position</th>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>user</td>
+          <td>0</td>
+        </tr>
+      </table>
+    </div>
+
+    <canvas id="game-board" class="board"></canvas>
+
+    <div class="information-column">
+        <h1>Tetris</h1>
+      <canvas id="next-tetromino" class="board"></canvas>
+      <div>
+        <p>Name: <span id="name"></span></p>
+        <p>Score: <span id="score"></span></p>
+        <p>Lines: <span id="lines"></span></p>
+        <p>Level: <span id="level"></span></p>
+      </div>
+      <button id="play-button">Play</button>
+    </div>
+
+  </div>
+</section>
+</body>
+<script type="module" src="./main.js"></script>
+</html>
