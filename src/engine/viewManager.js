@@ -3,7 +3,7 @@ import {
   COLORS,
   GRID_WIDTH,
   HEIGHT,
-  NONE_COLOR,
+  NONE_COLOR, VERTICAL_OFFSETS,
   WIDTH,
 } from '../constants/config.js';
 
@@ -29,7 +29,6 @@ class ViewManager {
   };
 
   onNextTetrominoGenerated = (event) => {
-    console.log(event);
     this.redrawNextTetromino(event.get('tetromino'));
   };
 
