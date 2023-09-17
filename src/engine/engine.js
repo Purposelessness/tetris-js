@@ -41,6 +41,9 @@ class Engine {
       'z': () => {
         this.onRotationEvent(ROTATION_DIRECTION.counterclockwise);
       },
+      ' ': () => {
+        Engine.safeCall(this.gameSession, GameSession.prototype.forceDrop);
+      },
     };
   }
 

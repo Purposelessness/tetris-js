@@ -14,8 +14,7 @@ function generateRandomInt(min, max) {
 }
 
 function generateTetromino() {
-  // const tetrominoIndex = generateRandomInt(0, TETROMINOS.length - 1);
-  const tetrominoIndex = TETROMINOS.length - 1;
+  const tetrominoIndex = generateRandomInt(0, TETROMINOS.length - 1);
   const colorIndex = generateRandomInt(1, COLORS.length - 1);
   return new Tetromino(TETROMINOS[tetrominoIndex], colorIndex);
 }
@@ -57,13 +56,7 @@ class GameSession {
         {'tetromino': this.nextTetromino.rawShape});
   }
 
-  onMovementEvent(direction, isTriggeredByTick = false) {
-    const success = this.controller.doMovement(direction);
-    if (!isTriggeredByTick || success) {
-      this.callRedraw();
-      return;
-    }
-
+  onTetrominoReachedBottom() {
     this.controller.fix();
     let linesCount = cleanBoardLines(this.board, this.tetromino);
     if (linesCount > 0) {
@@ -75,6 +68,20 @@ class GameSession {
     if (!isAlive) {
       this.sessionEndedEventHandler.fire();
     }
+  }
+
+  onMovementEvent(direction, isTriggeredByTick = false) {
+    const success = this.controller.doMovement(direction);
+    if (!isTriggeredByTick || success) {
+      this.callRedraw();
+      return;
+    }
+    this.onTetrominoReachedBottom();
+  }
+
+  forceDrop() {
+    while (this.controller.doMovement('down')) {}
+    this.onTetrominoReachedBottom();
   }
 
   onRotationEvent(direction) {

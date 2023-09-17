@@ -48,8 +48,6 @@ class Session {
   }
 
   delay() {
-    console.log(this.level);
-    console.log(DELAY_FOR_LEVEL[this.level]);
     return DELAY_FOR_LEVEL[this.level];
   }
 }
