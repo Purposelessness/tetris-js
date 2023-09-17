@@ -4,6 +4,7 @@ import {SessionController} from './sessionController.js';
 import {Tetromino} from '../objects/tetromino.js';
 import {TETROMINOS} from '../constants/tetromino.js';
 import {fillMatrixWith} from '../utilities.js';
+import {cleanBoardLines} from './sessionHelper.js';
 
 export {Session};
 
@@ -32,6 +33,9 @@ class Session {
     if (!isTriggeredByTick || success) return;
 
     this.controller.fix();
+    let result = cleanBoardLines(this.board, this.tetromino);
+    console.info(`[Session] Lines cleared: ${result}`);
+
     this.tetromino = generateTetromino();
     const isAlive = this.controller.setTetromino(this.tetromino);
 
