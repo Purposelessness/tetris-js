@@ -3,7 +3,7 @@ import {
   COLORS,
   GRID_WIDTH,
   HEIGHT,
-  NONE_COLOR, VERTICAL_OFFSETS,
+  NONE_COLOR,
   WIDTH,
 } from '../constants/config.js';
 
@@ -23,11 +23,11 @@ class ViewManager {
     this.redraw(event.get('view'));
   };
 
-  onNextTetrominoGenerated = (event) => {
+  onNextTetrominoGeneratedEvent = (event) => {
     this.redrawNextTetromino(event.get('tetromino'));
   };
 
-  onSessionInfoChanged = (event) => {
+  onSessionInfoChangedEvent = (event) => {
     this.nameLabel.textContent = event.get('name');
     this.scoreLabel.textContent = event.get('score');
     this.linesLabel.textContent = event.get('linesCleared');
@@ -90,6 +90,58 @@ class ViewManager {
             squareWidth(), squareWidth(),
         );
       }
+    }
+  }
+
+  // Returns the position in the leaderboard where the score should be inserted.
+  findPositionInLeaderboard(currentScore) {
+    const leaderboard = document.getElementById('leaderboard');
+    let left = 1;
+    let right = leaderboard.rows.length;
+    while (left < right) {
+      const mid = Math.floor((left + right) / 2);
+      const score = parseInt(leaderboard.rows[mid].cells[2].textContent);
+      if (currentScore < score) {
+        left = mid + 1;
+      } else {
+        right = mid;
+      }
+    }
+    return left;
+  }
+
+  onSessionEndedEvent(sessionInfo) {
+    const leaderboard = document.getElementById('leaderboard');
+    const row = document.createElement('tr');
+    const positionElement = document.createElement('td');
+    const nameElement = document.createElement('td');
+    const scoreElement = document.createElement('td');
+
+    const positionIndex = this.findPositionInLeaderboard(sessionInfo.score);
+    positionElement.textContent = positionIndex;
+    nameElement.textContent = sessionInfo.name;
+    scoreElement.textContent = sessionInfo.score;
+
+    row.appendChild(positionElement);
+    row.appendChild(nameElement);
+    row.appendChild(scoreElement);
+
+    // Insert row in the correct position.
+    if (positionIndex === leaderboard.rows.length ||
+        leaderboard.rows.length === 1) {
+      leaderboard.appendChild(row);
+    } else {
+      leaderboard.insertBefore(row, leaderboard.rows[positionIndex]);
+    }
+
+    // Correct positions in other rows.
+    for (let i = positionIndex + 1; i < leaderboard.rows.length; ++i) {
+      leaderboard.rows[i].cells[0].textContent = i;
+    }
+
+    // Delete last row if there are more than 20 rows (one row is header).
+    if (leaderboard.rows.length > 21) {
+      leaderboard.deleteRow(leaderboard.rows.length - 1);
     }
   }
 }

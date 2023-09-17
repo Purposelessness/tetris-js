@@ -11,8 +11,9 @@ export {Engine};
 
 class Engine {
   onSessionEndedEvent = () => {
-    this.gameSession = null;
     console.info('[Engine] Session finished');
+    this.gameSession = null;
+    this.viewManager.onSessionEndedEvent(this.session.getInformation());
   };
 
   static safeCall(obj, func, ...params) {
@@ -24,7 +25,7 @@ class Engine {
     this.session = new Session(name);
     this.viewManager = new ViewManager(document);
     this.session.sessionInfoChangedEventHandlers.addListeners(
-        this.viewManager.onSessionInfoChanged);
+        this.viewManager.onSessionInfoChangedEvent);
     this.gameSession = null;
 
     this.keymap = {
@@ -56,7 +57,7 @@ class Engine {
     this.gameSession.redrawEventHandler.addListeners(
         this.viewManager.onRedrawEvent);
     this.gameSession.nextTetrominoGeneratedEventHandler.addListeners(
-        this.viewManager.onNextTetrominoGenerated);
+        this.viewManager.onNextTetrominoGeneratedEvent);
     this.gameSession.linesCleanedEventHandler.addListeners(
         this.session.onLinesCleanedEvent);
 

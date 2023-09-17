@@ -21,13 +21,17 @@ class Session {
     this.resetScore();
   }
 
-  fireSessionInfoChangedEvent() {
-    this.sessionInfoChangedEventHandlers.fire({
+  getInformation() {
+    return {
       name: this.name,
       score: this.score,
       linesCleared: this.linesCleared,
       level: this.level,
-    });
+    };
+  }
+
+  fireSessionInfoChangedEvent() {
+    this.sessionInfoChangedEventHandlers.fire(this.getInformation());
   }
 
   updateScore(linesCleaned) {
