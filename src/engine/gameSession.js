@@ -14,8 +14,7 @@ function generateRandomInt(min, max) {
 }
 
 function generateTetromino() {
-  // const tetrominoIndex = generateRandomInt(0, TETROMINOS.length - 1);
-  const tetrominoIndex = 0;
+  const tetrominoIndex = generateRandomInt(0, TETROMINOS.length - 1);
   const colorIndex = generateRandomInt(1, COLORS.length - 1);
   return new Tetromino(TETROMINOS[tetrominoIndex], colorIndex);
 }
@@ -51,7 +50,7 @@ class GameSession {
     }
 
     this.tetromino = generateTetromino();
-    const isAlive = this.controller.setTetromino(this.tetromino);
+    const isAlive = this.controller.setTetromino(this.tetromino, true);
 
     this.callRedraw();
 

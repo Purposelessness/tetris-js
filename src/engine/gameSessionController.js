@@ -6,11 +6,11 @@ class GameSessionController {
     this.tetromino = null;
   }
 
-  setTetromino(tetromino) {
+  setTetromino(tetromino, force = false) {
     this.tetromino = tetromino;
     const startY = 2 - this.tetromino.shape().length;
     const startX = Math.floor(this.board.grid[0].length / 2);
-    return this.moveTo(startX, startY);
+    return this.moveTo(startX, startY, force);
   }
 
   doMovement(direction) {
@@ -63,14 +63,15 @@ class GameSessionController {
     return false;
   }
 
-  moveTo(x, y) {
-    if (this.board.intersectsWith(this.tetromino.shape(), x, y)) {
+  moveTo(x, y, force) {
+    const intersects = this.board.intersectsWith(this.tetromino.shape(), x, y);
+    if (intersects && !force) {
       console.debug(`[Controller] Cannot move to (${x}, ${y})`);
       return false;
     }
 
     this.tetromino.setPosition(x, y);
-    return true;
+    return !intersects;
   }
 
   fix() {

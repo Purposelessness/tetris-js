@@ -6,6 +6,7 @@ function getEmptyMatrix(height, width) {
 }
 
 function checkBoardLine(boardLine) {
+  if (boardLine === null || boardLine === undefined) return false;
   return boardLine.every((cell) => { return cell !== 0; });
 }
 
