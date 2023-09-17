@@ -1,15 +1,15 @@
-import {BLOCK_SIZE, COLORS, HEIGHT, WIDTH} from '../constants/config.js';
 import {
   MOVEMENT_DIRECTION,
   ROTATION_DIRECTION,
 } from '../constants/sessionConfig.js';
 import {Session} from './session.js';
-import {safeCall as safeCallImpl} from '../utilities.js';
+import {safeCall as safeCallImpl} from '../utilities/utilities.js';
+import {ViewManager} from './viewManager.js';
 
 export {Engine};
 
 class Engine {
-  onEndSessionEvent = () => {
+  onSessionEndedEvent = () => {
     this.session = null;
     console.info('[Engine] Session finished');
   };
@@ -18,9 +18,9 @@ class Engine {
     safeCallImpl('Engine', obj, func, ...params);
   }
 
-  constructor(context) {
+  constructor(document) {
+    this.viewManager = new ViewManager(document);
     this.session = null;
-    this.ctx = context;
 
     this.keymap = {
       'ArrowLeft': () => {
@@ -37,18 +37,16 @@ class Engine {
         this.onRotationEvent(ROTATION_DIRECTION.counterclockwise);
       },
     };
-
-    this.configureContext();
-  }
-
-  configureContext() {
-    this.ctx.canvas.width = WIDTH * BLOCK_SIZE;
-    this.ctx.canvas.height = HEIGHT * BLOCK_SIZE;
-    this.ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
   }
 
   run() {
-    this.session = new Session(this.onEndSessionEvent);
+    this.session = new Session();
+    this.session.sessionEndedEventHandler.addListeners(
+        this.onSessionEndedEvent);
+    this.session.redrawEventHandler.addListeners(
+        this.viewManager.onRedrawEvent);
+    this.session.linesCleanedEventHandler.addListeners(
+        this.viewManager.onLinesCleanedEvent);
     this.callNextTick();
   }
 
@@ -67,24 +65,10 @@ class Engine {
   onMovementEvent(direction, isForced = false) {
     Engine.safeCall(this.session, Session.prototype.onMovementEvent,
         direction, isForced);
-    this.redraw();
   }
 
   onRotationEvent(direction) {
     Engine.safeCall(this.session, Session.prototype.onRotationEvent, direction);
-    this.redraw();
-  }
-
-  redraw() {
-    if (this.session === null) return;
-    let view = this.session.view();
-    for (let j = 0; j < view.length; ++j) {
-      for (let i = 0; i < view[j].length; ++i) {
-        const colorIndex = view[j][i];
-        this.ctx.fillStyle = COLORS[colorIndex];
-        this.ctx.fillRect(i, j, 1, 1);
-      }
-    }
   }
 
   onKeydown(event) {

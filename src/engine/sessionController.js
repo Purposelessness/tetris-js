@@ -37,7 +37,7 @@ class SessionController {
       action.call(object);
       if (this.board.intersectsWith(this.tetromino.shape(),
           this.tetromino.x, this.tetromino.y)) {
-        console.log('[Controller] Cannot rotate');
+        console.debug('[Controller] Cannot rotate');
         undoAction.call(object);
         return false;
       }
@@ -65,7 +65,7 @@ class SessionController {
 
   moveTo(x, y) {
     if (this.board.intersectsWith(this.tetromino.shape(), x, y)) {
-      console.log(`[Controller] Cannot move to (${x}, ${y})`);
+      console.debug(`[Controller] Cannot move to (${x}, ${y})`);
       return false;
     }
 

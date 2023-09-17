@@ -1,4 +1,4 @@
-import {fillMatrixWith} from '../utilities.js';
+import {fillMatrixWith} from '../utilities/utilities.js';
 
 export {Board};
 

@@ -1,9 +1,6 @@
 import {Engine} from './engine/engine.js';
 
-const board = document.getElementById('board');
-const ctx = board.getContext('2d');
-
-const engine = new Engine(ctx);
+const engine = new Engine(document);
 
 document.addEventListener('keydown', function(event) {
   engine.onKeydown(event);

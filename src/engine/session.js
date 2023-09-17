@@ -3,8 +3,8 @@ import {COLORS, HEIGHT, WIDTH} from '../constants/config.js';
 import {SessionController} from './sessionController.js';
 import {Tetromino} from '../objects/tetromino.js';
 import {TETROMINOS} from '../constants/tetromino.js';
-import {fillMatrixWith} from '../utilities.js';
-import {cleanBoardLines} from './sessionHelper.js';
+import {cleanBoardLines, fillMatrixWith} from '../utilities/utilities.js';
+import {EventHandler} from '../utilities/eventHandler.js';
 
 export {Session};
 
@@ -20,32 +20,48 @@ function generateTetromino() {
 }
 
 class Session {
-  constructor(endSessionEventListener) {
+  constructor() {
     this.board = new Board(WIDTH, HEIGHT);
     this.controller = new SessionController(this.board);
     this.tetromino = generateTetromino();
     this.controller.setTetromino(this.tetromino);
-    this.endSessionEvent = endSessionEventListener;
+
+    this.sessionEndedEventHandler = new EventHandler('sessionEnded');
+    this.redrawEventHandler = new EventHandler('redraw');
+    this.linesCleanedEventHandler = new EventHandler('linesCleaned');
+  }
+
+  callRedraw() {
+    this.redrawEventHandler.call({'view': this.view()});
   }
 
   onMovementEvent(direction, isTriggeredByTick = false) {
     const success = this.controller.doMovement(direction);
-    if (!isTriggeredByTick || success) return;
+    if (!isTriggeredByTick || success) {
+      this.callRedraw();
+      return;
+    }
 
     this.controller.fix();
-    let result = cleanBoardLines(this.board, this.tetromino);
-    console.info(`[Session] Lines cleared: ${result}`);
+    let linesCount = cleanBoardLines(this.board, this.tetromino);
+    if (linesCount > 0) {
+      console.info(`[Session] Lines cleared: ${linesCount}`);
+      this.linesCleanedEventHandler.call({'count': linesCount});
+    }
 
     this.tetromino = generateTetromino();
     const isAlive = this.controller.setTetromino(this.tetromino);
 
+    this.callRedraw();
+
     if (!isAlive) {
-      this.endSessionEvent();
+      this.sessionEndedEventHandler.call();
     }
   }
 
   onRotationEvent(direction) {
     this.controller.doRotation(direction);
+    this.callRedraw();
   }
 
   view() {

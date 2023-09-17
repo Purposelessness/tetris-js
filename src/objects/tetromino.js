@@ -1,4 +1,4 @@
-import {colorMatrix} from '../utilities.js';
+import {colorMatrix} from '../utilities/utilities.js';
 
 export {Tetromino};
 
