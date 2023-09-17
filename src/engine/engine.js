@@ -9,6 +9,11 @@ import {safeCall as safeCallImpl} from '../utilities.js';
 export {Engine};
 
 class Engine {
+  onEndSessionEvent = () => {
+    this.session = null;
+    console.info('[Engine] Session finished');
+  };
+
   static safeCall(obj, func, ...params) {
     safeCallImpl('Engine', obj, func, ...params);
   }
@@ -43,13 +48,13 @@ class Engine {
   }
 
   run() {
-    this.session = new Session();
+    this.session = new Session(this.onEndSessionEvent);
     this.callNextTick();
   }
 
   tick() {
+    if (this.session === null) return;
     this.onMovementEvent(MOVEMENT_DIRECTION.down, true);
-
     this.callNextTick();
   }
 
@@ -71,11 +76,7 @@ class Engine {
   }
 
   redraw() {
-    if (this.session === null) {
-      console.warn('[Engine] Cannot draw empty session');
-      return;
-    }
-
+    if (this.session === null) return;
     let view = this.session.view();
     for (let j = 0; j < view.length; ++j) {
       for (let i = 0; i < view[j].length; ++i) {
@@ -84,10 +85,6 @@ class Engine {
         this.ctx.fillRect(i, j, 1, 1);
       }
     }
-  }
-
-  resetSession() {
-    this.session = new Session();
   }
 
   onKeydown(event) {

@@ -15,17 +15,16 @@ function generateRandomInt(min, max) {
 function generateTetromino() {
   const tetrominoIndex = generateRandomInt(0, TETROMINOS.length - 1);
   const colorIndex = generateRandomInt(1, COLORS.length - 1);
-  console.log(
-      `Tetromino: ${tetrominoIndex}, ${colorIndex} = ${COLORS[colorIndex]}`);
   return new Tetromino(TETROMINOS[tetrominoIndex], colorIndex);
 }
 
 class Session {
-  constructor() {
+  constructor(endSessionEventListener) {
     this.board = new Board(WIDTH, HEIGHT);
     this.controller = new SessionController(this.board);
     this.tetromino = generateTetromino();
     this.controller.setTetromino(this.tetromino);
+    this.endSessionEvent = endSessionEventListener;
   }
 
   onMovementEvent(direction, isTriggeredByTick = false) {
@@ -34,7 +33,11 @@ class Session {
 
     this.controller.fix();
     this.tetromino = generateTetromino();
-    this.controller.setTetromino(this.tetromino);
+    const isAlive = this.controller.setTetromino(this.tetromino);
+
+    if (!isAlive) {
+      this.endSessionEvent();
+    }
   }
 
   onRotationEvent(direction) {
