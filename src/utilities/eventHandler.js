@@ -27,7 +27,7 @@ class EventHandler {
     this.subscribers.delete(listener);
   }
 
-  call(args = {}) {
+  fire(args = {}) {
     for (let [key, value] of this.subscribers) {
       value(new Event(this.name, args));
     }

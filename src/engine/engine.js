@@ -5,12 +5,13 @@ import {
 import {GameSession} from './gameSession.js';
 import {safeCall as safeCallImpl} from '../utilities/utilities.js';
 import {ViewManager} from './viewManager.js';
+import {Session} from './session.js';
 
 export {Engine};
 
 class Engine {
   onSessionEndedEvent = () => {
-    this.session = null;
+    this.gameSession = null;
     console.info('[Engine] Session finished');
   };
 
@@ -19,8 +20,12 @@ class Engine {
   }
 
   constructor(document) {
+    const name = localStorage.getItem('name');
+    this.session = new Session(name);
     this.viewManager = new ViewManager(document);
-    this.session = null;
+    this.session.sessionInfoChangedEventHandlers.addListeners(
+        this.viewManager.onSessionInfoChanged);
+    this.gameSession = null;
 
     this.keymap = {
       'ArrowLeft': () => {
@@ -42,22 +47,23 @@ class Engine {
   run() {
     clearTimeout(this.timeoutId);
 
-    this.session = new GameSession();
-    this.session.sessionEndedEventHandler.addListeners(
+    this.gameSession = new GameSession();
+    this.gameSession.sessionEndedEventHandler.addListeners(
         this.onSessionEndedEvent);
-    this.session.redrawEventHandler.addListeners(
+    this.gameSession.redrawEventHandler.addListeners(
         this.viewManager.onRedrawEvent);
-    this.session.nextTetrominoGeneratedEventHandler.addListeners(
+    this.gameSession.nextTetrominoGeneratedEventHandler.addListeners(
         this.viewManager.onNextTetrominoGenerated);
-    this.session.linesCleanedEventHandler.addListeners(
-        this.viewManager.onLinesCleanedEvent);
+    this.gameSession.linesCleanedEventHandler.addListeners(
+        this.session.onLinesCleanedEvent);
 
-    this.session.setTetromino();
+    this.session.resetScore();
+    this.gameSession.setTetromino();
     this.callNextTick();
   }
 
   tick() {
-    if (this.session === null) return;
+    if (this.gameSession === null) return;
     this.onMovementEvent(MOVEMENT_DIRECTION.down, true);
     this.callNextTick();
   }
@@ -65,16 +71,17 @@ class Engine {
   callNextTick() {
     this.timeoutId = setTimeout(() => {
       this.tick();
-    }, 500);
+    }, this.session.delay());
   }
 
   onMovementEvent(direction, isForced = false) {
-    Engine.safeCall(this.session, GameSession.prototype.onMovementEvent,
+    Engine.safeCall(this.gameSession, GameSession.prototype.onMovementEvent,
         direction, isForced);
   }
 
   onRotationEvent(direction) {
-    Engine.safeCall(this.session, GameSession.prototype.onRotationEvent, direction);
+    Engine.safeCall(this.gameSession, GameSession.prototype.onRotationEvent,
+        direction);
   }
 
   onKeydown(event) {

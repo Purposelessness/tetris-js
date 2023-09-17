@@ -7,7 +7,7 @@ const HEIGHT = 20;
 const VERTICAL_OFFSETS = 100;
 const BLOCK_SIZE = Math.floor(
     (window.innerHeight - VERTICAL_OFFSETS) / HEIGHT);
-const GRID_WIDTH = 0.007;
+const GRID_WIDTH = 0.0009 * BLOCK_SIZE;
 
 const NONE_COLOR = '#999999';
 const COLORS = [

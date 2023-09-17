@@ -23,16 +23,18 @@ class ViewManager {
     this.redraw(event.get('view'));
   };
 
-  onLinesCleanedEvent = (event) => {
-    this.linesLabel.textContent = parseInt(this.linesLabel.textContent) +
-        event.get('count');
-  };
-
   onNextTetrominoGenerated = (event) => {
     this.redrawNextTetromino(event.get('tetromino'));
   };
 
-  constructor(document) {
+  onSessionInfoChanged = (event) => {
+    this.nameLabel.textContent = event.get('name');
+    this.scoreLabel.textContent = event.get('score');
+    this.linesLabel.textContent = event.get('linesCleared');
+    this.levelLabel.textContent = event.get('level');
+  };
+
+  constructor(document, name) {
     this.ctx = document.getElementById('game-board').getContext('2d');
     this.nextTetrominoCtx = document.getElementById('next-tetromino').
         getContext('2d');
@@ -43,6 +45,7 @@ class ViewManager {
     this.levelLabel = document.getElementById('level');
 
     this.configureContext();
+    this.nameLabel.textContent = name;
   }
 
   configureContext() {
